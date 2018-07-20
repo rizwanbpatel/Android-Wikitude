@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         final ArchitectStartupConfiguration config = new ArchitectStartupConfiguration();
         config.setLicenseKey("4bHXRiTfwAXTCeH60c0HKLoi3twDKxItUd56r9isF7hZ04fIqsRxuBMAAondByGMjFAJzJdPaR3/3Ctm8VAP9QMbX/PAnMlLLzynGK9jrbbo19v4oi7t1EoEnbqcl+n24qewNvyanZuuch5wf4889PFmAJTCjVsR5eKmysUxMGNTYWx0ZWRfX8eaqYtW7fSolueGvBUhzkcavmdjGjPO7V+YLGUNbNFK8kTZhjvLWn+nmMl5KZPNvsMkckPzpLaoRiys3Jn3v0KwaM4zsqyGxOMV7zuaETbfoC7iNZ7N4SsSIZHfk+DChZY/9KOcODp76Wu9xA5g6a2EUNfy3aXb+X+VbxSJXUn7vuky5ddnl9z7igKzjT7zGCbkCGd0iOTAZEdkAf2iyz7/oV5zBaTVi1L9twslvFCDGf1OGUKPhh363tnH/ubkaTr4SuV0Vj6EtYhUuU0vJleDLpIo8iJHwo9JeHoyAKvhCT7AlKXsS64U1dKhfpWyXQI7SmnF211OzU5xHd82E967SJzD9UpHg2IEou3V1FYDAye6cCYW6alBSOljIE9MQsIsDPC/VwXjqdz9E7d10YSI/hDfPI419KcDFqRQbn6N1m9oQid3ptaoDhjPMnATRt79OFCDaNxAk9Nv7JaZNM3l5uXgCgf5FWM2wnpzOn6DyZGgqaBvEZzZ8AhAiyRrpXupcEPmU+s4QJUqwbRPHLqa+o6EM1nhRQ==");
         this.architectView.onCreate(config);
+
     }
 
     @Override
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         this.architectView.onPostCreate();
         try {
             this.architectView.load("index.html");
+            architectView.setLocation(18.5559569,73.8918798,5);
         } catch (IOException e) {
             e.printStackTrace();
         }

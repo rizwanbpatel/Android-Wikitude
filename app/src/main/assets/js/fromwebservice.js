@@ -1,138 +1,154 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
-	POIDATA_SERVER: "https://example.wikitude.com/GetSamplePois/",
-	POIDATA_SERVER_ARG_LAT: "lat",
-	POIDATA_SERVER_ARG_LON: "lon",
-	POIDATA_SERVER_ARG_NR_POIS: "nrPois"
+    POIDATA_SERVER: "https://api.tomtom.com/search/2/search/hotel.json?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&typeahead=true&limit=25&lat=18.60878&lon=73.76273&language=en-GB",
+    POIDATA_SERVER_ARG_LAT: "lat",
+    POIDATA_SERVER_ARG_LON: "lon",
+    POIDATA_SERVER_ARG_NR_POIS: "India"
 };
 
 // implementation of AR-Experience (aka "World")
 var World = {
-	// you may request new data from server periodically, however: in this sample data is only requested once
-	isRequestingData: false,
+    // you may request new data from server periodically, however: in this sample data is only requested once
+    isRequestingData: false,
 
-	// true once data was fetched
-	initiallyLoadedData: false,
+    // true once data was fetched
+    initiallyLoadedData: false,
 
-	// different POI-Marker assets
-	markerDrawable_idle: null,
-	markerDrawable_selected: null,
-	markerDrawable_directionIndicator: null,
+    // different POI-Marker assets
+    markerDrawable_idle: null,
+    markerDrawable_selected: null,
+    markerDrawable_directionIndicator: null,
 
-	// list of AR.GeoObjects that are currently shown in the scene / World
-	markerList: [],
+    // list of AR.GeoObjects that are currently shown in the scene / World
+    markerList: [],
 
-	// The last selected marker
-	currentMarker: null,
+    // The last selected marker
+    currentMarker: null,
 
-	// called to inject new POI data
-	loadPoisFromJsonData: function loadPoisFromJsonDataFn(poiData) {
+    // called to inject new POI data
+    loadPoisFromJsonData: function loadPoisFromJsonDataFn(poiData) {
 
-		// empty list of visible markers
-		World.markerList = [];
+        // empty list of visible markers
+        World.markerList = [];
+        resultList = poiData.results;
 
-		// start loading marker assets
-		World.markerDrawable_idle = new AR.ImageResource("assets/marker_idle.png");
-		World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
-		World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
 
-		// loop through POI-information and create an AR.GeoObject (=Marker) per POI
-		for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
-			var singlePoi = {
-				"id": poiData[currentPlaceNr].id,
-				"latitude": parseFloat(poiData[currentPlaceNr].latitude),
-				"longitude": parseFloat(poiData[currentPlaceNr].longitude),
-				"altitude": parseFloat(poiData[currentPlaceNr].altitude),
-				"title": poiData[currentPlaceNr].name,
-				"description": poiData[currentPlaceNr].description
-			};
+        World.markerDrawable_idle = new AR.ImageResource("assets/marker_idle.png");
+        World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
+        World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
 
-			World.markerList.push(new Marker(singlePoi));
-		}
+        for (var i = 0; i < resultList.length; i++) {
+            itPoi = resultList[i];
+            var singlePoi = {
+                "id": itPoi.id,
+                "latitude": parseFloat(itPoi.position.lat),
+                "longitude": parseFloat(itPoi.position.lon),
+                "altitude": parseFloat(0.0),
+                "title": itPoi.poi.name,
+                "description": "hotel"
+            };
 
-		World.updateStatusMessage(currentPlaceNr + ' places loaded');
-	},
+            World.markerList.push(new Marker(singlePoi));
+        }
+        // start loading marker assets
 
-	// updates status message shown in small "i"-button aligned bottom center
-	updateStatusMessage: function updateStatusMessageFn(message, isWarning) {
+        // loop through POI-information and create an AR.GeoObject (=Marker) per POI
+        // for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
+        //     var singlePoi = {
+        //         "id": poiData[currentPlaceNr].id,
+        //         "latitude": parseFloat(poiData[currentPlaceNr].latitude),
+        //         "longitude": parseFloat(poiData[currentPlaceNr].longitude),
+        //         "altitude": parseFloat(poiData[currentPlaceNr].altitude),
+        //         "title": poiData[currentPlaceNr].name,
+        //         "description": poiData[currentPlaceNr].description
+        //     };
+        //
+        //     World.markerList.push(new Marker(singlePoi));
+        // }
 
-		var themeToUse = isWarning ? "e" : "c";
-		var iconToUse = isWarning ? "alert" : "info";
+        World.updateStatusMessage(World.markerList.length + ' places loaded');
+    },
 
-		$("#status-message").html(message);
-		$("#popupInfoButton").buttonMarkup({
-			theme: themeToUse
-		});
-		$("#popupInfoButton").buttonMarkup({
-			icon: iconToUse
-		});
-	},
+    // updates status message shown in small "i"-button aligned bottom center
+    updateStatusMessage: function updateStatusMessageFn(message, isWarning) {
 
-	// location updates, fired every time you call architectView.setLocation() in native environment
-	// Note: You may set 'AR.context.onLocationChanged = null' to no longer receive location updates in World.locationChanged.
-	locationChanged: function locationChangedFn(lat, lon, alt, acc) {
+        var themeToUse = isWarning ? "e" : "c";
+        var iconToUse = isWarning ? "alert" : "info";
 
-		// request data if not already present
-		if (!World.initiallyLoadedData) {
-			World.requestDataFromServer(lat, lon);
-			World.initiallyLoadedData = true;
-		}
-	},
+        $("#status-message").html(message);
+        $("#popupInfoButton").buttonMarkup({
+            theme: themeToUse
+        });
+        $("#popupInfoButton").buttonMarkup({
+            icon: iconToUse
+        });
+    },
 
-	// fired when user pressed maker in cam
-	onMarkerSelected: function onMarkerSelectedFn(marker) {
+    // location updates, fired every time you call architectView.setLocation() in native environment
+    // Note: You may set 'AR.context.onLocationChanged = null' to no longer receive location updates in World.locationChanged.
+    locationChanged: function locationChangedFn(lat, lon, alt, acc) {
 
-		// deselect previous marker
-		if (World.currentMarker) {
-			if (World.currentMarker.poiData.id == marker.poiData.id) {
-				return;
-			}
-			World.currentMarker.setDeselected(World.currentMarker);
-		}
+        // request data if not already present
+        if (!World.initiallyLoadedData) {
+            World.requestDataFromServer(lat, lon);
+            World.initiallyLoadedData = true;
+        }
+    },
 
-		// highlight current one
-		marker.setSelected(marker);
-		World.currentMarker = marker;
-	},
+    // fired when user pressed maker in cam
+    onMarkerSelected: function onMarkerSelectedFn(marker) {
 
-	// screen was clicked but no geo-object was hit
-	onScreenClick: function onScreenClickFn() {
-		if (World.currentMarker) {
-			World.currentMarker.setDeselected(World.currentMarker);
-		}
-		World.currentMarker = null;
-	},
+        // deselect previous marker
+        if (World.currentMarker) {
+            if (World.currentMarker.poiData.id == marker.poiData.id) {
+                return;
+            }
+            World.currentMarker.setDeselected(World.currentMarker);
+        }
 
-	/*
-		JQuery provides a number of tools to load data from a remote origin. 
-		It is highly recommended to use the JSON format for POI information. Requesting and parsing is done in a few lines of code.
-		Use e.g. 'AR.context.onLocationChanged = World.locationChanged;' to define the method invoked on location updates. 
-		In this sample POI information is requested after the very first location update. 
+        // highlight current one
+        marker.setSelected(marker);
+        World.currentMarker = marker;
+    },
 
-		This sample uses a test-service of Wikitude which randomly delivers geo-location data around the passed latitude/longitude user location.
-		You have to update 'ServerInformation' data to use your own own server. Also ensure the JSON format is same as in previous sample's 'myJsonData.js'-file.
-	*/
-	// request POI data
-	requestDataFromServer: function requestDataFromServerFn(lat, lon) {
+    // screen was clicked but no geo-object was hit
+    onScreenClick: function onScreenClickFn() {
+        if (World.currentMarker) {
+            World.currentMarker.setDeselected(World.currentMarker);
+        }
+        World.currentMarker = null;
+    },
 
-		// set helper var to avoid requesting places while loading
-		World.isRequestingData = true;
-		World.updateStatusMessage('Requesting places from web-service');
 
-		// server-url to JSON content provider
-		var serverUrl = ServerInformation.POIDATA_SERVER + "?" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&" + ServerInformation.POIDATA_SERVER_ARG_NR_POIS + "=20";
+    /*
+        JQuery provides a number of tools to load data from a remote origin.
+        It is highly recommended to use the JSON format for POI information. Requesting and parsing is done in a few lines of code.
+        Use e.g. 'AR.context.onLocationChanged = World.locationChanged;' to define the method invoked on location updates.
+        In this sample POI information is requested after the very first location update.
 
-		var jqxhr = $.getJSON(serverUrl, function(data) {
-				World.loadPoisFromJsonData(data);
-			})
-			.error(function(err) {
-				World.updateStatusMessage("Invalid web-service response.", true);
-				World.isRequestingData = false;
-			})
-			.complete(function() {
-				World.isRequestingData = false;
-			});
-	}
+        This sample uses a test-service of Wikitude which randomly delivers geo-location data around the passed latitude/longitude user location.
+        You have to update 'ServerInformation' data to use your own own server. Also ensure the JSON format is same as in previous sample's 'myJsonData.js'-file.
+    */
+    // request POI data
+    requestDataFromServer: function requestDataFromServerFn(lat, lon) {
+
+        // set helper var to avoid requesting places while loading
+        World.isRequestingData = true;
+        World.updateStatusMessage('Requesting places from web-service');
+
+        // server-url to JSON content provider
+        var serverUrl = ServerInformation.POIDATA_SERVER; //+ lat + "&lon=" + lon;
+        var jqxhr = $.getJSON(serverUrl, function (data) {
+            World.loadPoisFromJsonData(data);
+        })
+            .error(function (err) {
+                World.updateStatusMessage("Invalid web-service response.", true);
+                World.isRequestingData = false;
+            })
+            .complete(function () {
+                World.isRequestingData = false;
+            });
+    }
 
 };
 

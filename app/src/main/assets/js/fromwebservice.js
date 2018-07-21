@@ -1,11 +1,9 @@
-// information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
     POIDATA_SERVER: "https://api.tomtom.com/search/2/search/hotel.json?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&typeahead=true&limit=25&lat=18.60878&lon=73.76273&language=en-GB",
     POIDATA_SERVER_ARG_LAT: "lat",
     POIDATA_SERVER_ARG_LON: "lon",
     POIDATA_SERVER_ARG_NR_POIS: "India"
 };
-
 // implementation of AR-Experience (aka "World")
 var World = {
     // you may request new data from server periodically, however: in this sample data is only requested once

@@ -41,6 +41,7 @@ var World = {
         World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
         World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
         World.bank = new AR.ImageResource("assets/logos/bank.png");
+        World.hotel = new AR.ImageResource("assets/logos/hotel1.png");
         World.cafe = new AR.ImageResource("assets/logos/cafe.png");
         World.doctor = new AR.ImageResource("assets/logos/doctor.png");
         World.petrol = new AR.ImageResource("assets/logos/petrol.png");
@@ -48,6 +49,7 @@ var World = {
         World.residential = new AR.ImageResource("assets/logos/residential.png");
         World.school = new AR.ImageResource("assets/logos/school.png");
         World.temple = new AR.ImageResource("assets/logos/temple.png");
+        World.gov = new AR.ImageResource("assets/logos/museum.png");
         World.default = new AR.ImageResource("assets/default.png");
 
         // loop through POI-information and create an AR.GeoObject (=Marker) per POI

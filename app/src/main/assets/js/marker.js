@@ -35,8 +35,10 @@ function Marker(poiData) {
         onClick: null
     });
     this.imageLable = null;
-    if (poiData.category.toLowerCase().includes("restaurant")) {
-        this.imageLable = World.hotelRes;
+    if (poiData.category.toUpperCase().includes("RESTAURANT")) {
+        this.imageLable = World.hotel;
+    } else if (poiData.category.toUpperCase().includes("NIGHTLIFE")) {
+        this.imageLable = World.cafe;
     }
     else if (poiData.category.toUpperCase().includes("CAFE_PUB")) {
         this.imageLable = World.cafe;
@@ -49,6 +51,8 @@ function Marker(poiData) {
         this.imageLable = World.temple;
     } else if (poiData.category.toUpperCase().includes("RESIDENTIAL_ACCOMMODATION")) {
         this.imageLable = World.residential;
+    } else if (poiData.category.toUpperCase().includes("GOVERNMENT_OFFICE")) {
+        this.imageLable = World.gov;
     }
     else if (poiData.category.toUpperCase().includes("BANK")) {
         this.imageLable = World.bank;
@@ -72,7 +76,7 @@ function Marker(poiData) {
         verticalAnchor: AR.CONST.VERTICAL_ANCHOR.BOTTOM,
         translate: {
             x: -0.60,
-            y: -0.25
+            y: -0.30
 
         },
         onClick: Marker.prototype.getOnClickTrigger(this),

@@ -1,9 +1,10 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
-    POIDATA_SERVER: "https://api.tomtom.com/search/2/search/hotel.json?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&typeahead=true&limit=25&lat=18.60878&lon=73.76273&language=en-GB",
+
+    POIDATA_SERVER: "https://api.tomtom.com/search/2/search/mall.json",
     POIDATA_SERVER_ARG_LAT: "lat",
     POIDATA_SERVER_ARG_LON: "lon",
-    POIDATA_SERVER_ARG_NR_POIS: "India"
+    POIDATA_SERVER_ARG_NR_POIS: "nrPois"
 };
 
 // implementation of AR-Experience (aka "World")
@@ -33,14 +34,14 @@ var World = {
 
         // empty list of visible markers
         World.markerList = [];
-
+        resultList = poiData.results;
         // start loading marker assets
         World.markerDrawable_idle = new AR.ImageResource("assets/marker_idle.png");
         World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
         World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
 
         // loop through POI-information and create an AR.GeoObject (=Marker) per POI
-        for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
+        /*for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
             var singlePoi = {
                 "id": poiData[currentPlaceNr].id,
                 "latitude": parseFloat(poiData[currentPlaceNr].latitude),
@@ -51,12 +52,26 @@ var World = {
             };
 
             World.markerList.push(new Marker(singlePoi));
+        }*/
+
+
+        for (var i = 0; i < resultList.length; i++) {
+            itPoi = resultList[i];
+            var singlePoi = {
+                "id": itPoi.id,
+                "latitude": parseFloat(itPoi.position.lat),
+                "longitude": parseFloat(itPoi.position.lon),
+                "altitude": parseFloat(0.0),
+                "title": itPoi.poi.name,
+                "description": "hotel"
+            };
+            World.markerList.push(new Marker(singlePoi));
         }
 
         // updates distance information of all placemarks
         World.updateDistanceToUserValues();
 
-        World.updateStatusMessage(currentPlaceNr + ' places loaded');
+        World.updateStatusMessage(World.markerList.length + ' places loaded');
     },
 
     // sets/updates distances of all makers so they are available way faster than calling (time-consuming) distanceToUser() method all the time
@@ -172,7 +187,7 @@ var World = {
         World.updateStatusMessage('Requesting places from web-service');
 
         // server-url to JSON content provider
-        var serverUrl = ServerInformation.POIDATA_SERVER + "?" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&" + ServerInformation.POIDATA_SERVER_ARG_NR_POIS + "=20";
+        var serverUrl = ServerInformation.POIDATA_SERVER + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";
 
         var jqxhr = $.getJSON(serverUrl, function (data) {
             World.loadPoisFromJsonData(data);
@@ -196,7 +211,6 @@ var World = {
         return b.distanceToUser - a.distanceToUser;
     }
 };
-
 
 /* forward locationChanges to custom function */
 AR.context.onLocationChanged = World.locationChanged;

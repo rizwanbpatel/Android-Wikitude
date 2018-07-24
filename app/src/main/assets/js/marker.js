@@ -1,6 +1,7 @@
 var kMarker_AnimationDuration_ChangeDrawable = 500;
 var kMarker_AnimationDuration_Resize = 1000;
 
+//#23B9FF
 function Marker(poiData) {
 
     this.poiData = poiData;
@@ -33,9 +34,39 @@ function Marker(poiData) {
         opacity: 1.0,
         onClick: null
     });
+    this.imageLable = null;
+    if (poiData.category.toLowerCase().includes("restaurant")) {
+        this.imageLable = World.hotelRes;
+    }
+    else if (poiData.category.toUpperCase().includes("CAFE_PUB")) {
+        this.imageLable = World.cafe;
+    } else if (poiData.description.toUpperCase().includes("PHARMACY")) {
+        this.imageLable = World.doctor;
+    }
+    else if (poiData.category.toUpperCase().includes("DOCTOR")) {
+        this.imageLable = World.doctor;
+    } else if (poiData.category.toUpperCase().includes("PLACE_OF_WORSHIP")) {
+        this.imageLable = World.temple;
+    } else if (poiData.category.toUpperCase().includes("RESIDENTIAL_ACCOMMODATION")) {
+        this.imageLable = World.residential;
+    }
+    else if (poiData.category.toUpperCase().includes("BANK")) {
+        this.imageLable = World.bank;
+    } else if (poiData.category.toUpperCase().includes("SHOP")) {
+        this.imageLable = null;
+    } else if (poiData.category.toUpperCase().includes("CASH_DISPENSER")) {
+        this.imageLable = World.bank;
+    }
+    else if (poiData.category.toUpperCase().includes("SCHOOL")) {
+        this.imageLable = World.school;
+    }
+    else if (poiData.category.toUpperCase().includes("POST_OFFICE")) {
+        this.imageLable = World.post_office;
+    } else {
+        this.imageLable = World.default;
+    }
 
-
-    this.hotelRes = new AR.ImageDrawable(World.hotelRes, 1.4, {
+    this.hotelRes = new AR.ImageDrawable(this.imageLable, 1.4, {
         zOrder: 1,
         opacity: 1.0,
         verticalAnchor: AR.CONST.VERTICAL_ANCHOR.BOTTOM,
@@ -52,7 +83,7 @@ function Marker(poiData) {
         zOrder: 1,
         translate: {
             y: 0.40,
-            x:0.05
+            x: 0.05
         },
         horizontalAnchor: AR.CONST.HORIZONTAL_ANCHOR.LEFT,
         style: {

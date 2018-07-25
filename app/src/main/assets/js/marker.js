@@ -131,6 +131,7 @@ Create an AR.ImageDrawable using the AR.ImageResource for the direction indicato
     return this;
 }
 
+// var highestRenderingOrder = 0;
 Marker.prototype.getOnClickTrigger = function (marker) {
 
     /*

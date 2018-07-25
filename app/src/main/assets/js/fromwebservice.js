@@ -10,6 +10,10 @@ var ServerInformation = {
 
 // implementation of AR-Experience (aka "World")
 var World = {
+
+    currentLat: 0,
+    currentLon: 0,
+    currentAlt: 0,
     // you may request new data from server periodically, however: in this sample data is only requested once
     isRequestingData: false,
 
@@ -24,6 +28,8 @@ var World = {
     // list of AR.GeoObjects that are currently shown in the scene / World
     markerList: [],
 
+    angleDict: [],
+
     // The last selected marker
     currentMarker: null,
 
@@ -32,6 +38,65 @@ var World = {
 
     // called to inject new POI data
     loadPoisFromJsonData: function loadPoisFromJsonDataFn(poiData) {
+
+
+        World.angleDict.push({
+                "st_ang": 0,
+                "end_ang": 20, "altitude": 0
+            }, {
+                "st_ang": 21,
+                "end_ang": 40, "altitude": 500
+            }, {
+                "st_ang": 41,
+                "end_ang": 60, "altitude": 500
+            }, {
+                "st_ang": 61,
+                "end_ang": 80, "altitude": 500
+            },
+            {
+                "st_ang": 81,
+                "end_ang": 100, "altitude": 500
+            }, {
+                "st_ang": 101,
+                "end_ang": 120, "altitude": 500
+            }, {
+                "st_ang": 121,
+                "end_ang": 140, "altitude": 500
+            }, {
+                "st_ang": 141,
+                "end_ang": 160, "altitude": 500
+            }, {
+                "st_ang": 161,
+                "end_ang": 180, "altitude": 500
+            }, {
+                "st_ang": 181,
+                "end_ang": 200, "altitude": 500
+            }, {
+                "st_ang": 201,
+                "end_ang": 220, "altitude": 500
+            }, {
+                "st_ang": 221,
+                "end_ang": 240, "altitude": 500
+            }, {
+                "st_ang": 241,
+                "end_ang": 260, "altitude": 500
+            }, {
+                "st_ang": 261,
+                "end_ang": 280, "altitude": 500
+            }, {
+                "st_ang": 281,
+                "end_ang": 300, "altitude": 500
+            }, {
+                "st_ang": 301,
+                "end_ang": 320, "altitude": 500
+            }, {
+                "st_ang": 321,
+                "end_ang": 240, "altitude": 500
+            }, {
+                "st_ang": 341,
+                "end_ang": 360, "altitude": 500
+            }
+        );
 
         // empty list of visible markers
         World.markerList = [];
@@ -78,6 +143,8 @@ var World = {
                 "description": itPoi.address.freeformAddress,
                 "category": itPoi.poi.classifications[0].code
             };
+            var angleDeg = Math.abs(Math.atan2(World.currentLon - itPoi.position.lon, World.currentLat - itPoi.position.lat) * 180 / Math.PI);
+            singlePoi.altitude = World.getAltitudeFromData(angleDeg);
             World.markerList.push(new Marker(singlePoi));
         }
 
@@ -86,6 +153,19 @@ var World = {
 
         World.updateStatusMessage(World.markerList.length + ' places loaded');
     },
+
+    getAltitudeFromData: function getAltitudeFromData(angleDeg) {
+        var alti = 0;
+        for (var i = 0; i < World.angleDict.length; i++) {
+            if (angleDeg >= World.angleDict[i].st_ang && angleDeg <= World.angleDict[i].end_ang) {
+                World.angleDict[i].altitude = World.angleDict[i].altitude + 10;
+                alti = World.angleDict[i].altitude;
+                break;
+            }
+        }
+        return alti;
+    },
+
 
     // sets/updates distances of all makers so they are available way faster than calling (time-consuming) distanceToUser() method all the time
     updateDistanceToUserValues: function updateDistanceToUserValuesFn() {
@@ -120,7 +200,9 @@ var World = {
             // update placemark distance information frequently, you max also update distances only every 10m with some more effort
             World.updateDistanceToUserValues();
         }
-
+        World.currentLat = lat;
+        World.currentLon = lon;
+        World.currentAlt = alt;
         // helper used to update placemark information every now and then (e.g. every 10 location upadtes fired)
         World.locationUpdateCounter = (++World.locationUpdateCounter % World.updatePlacemarkDistancesEveryXLocationUpdates);
     },
@@ -142,6 +224,7 @@ var World = {
         $("#poi-detail-title").html(marker.poiData.title);
         $("#poi-detail-description").html(marker.poiData.description);
         $("#poi-detail-category").html(marker.poiData.category);
+        // $("#poi-altitude").html(marker.poiData.altitude);
 
 
         // It's ok for AR.Location subclass objects to return a distance of `undefined`. In case such a distance was calculated when all distances were queried in `updateDistanceToUserValues`, we recalculate this specific distance before we update the UI.
@@ -152,7 +235,7 @@ var World = {
         // distance and altitude are measured in meters by the SDK. You may convert them to miles / feet if required.
         var distanceToUserValue = (marker.distanceToUser > 999) ? ((marker.distanceToUser / 1000).toFixed(2) + " km") : (Math.round(marker.distanceToUser) + " m");
 
-        $("#poi-detail-distance").html(distanceToUserValue);
+        // $("#poi-detail-distance").html(distanceToUserValue);
 
         // show panel
         $("#panel-poidetail").panel("open", 123);
@@ -201,7 +284,7 @@ var World = {
         World.updateStatusMessage('Requesting places from web-service');
 
         // server-url to JSON content provider
-        var serverUrl = ServerInformation.POIDATA_SERVER + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=500" + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";
+        var serverUrl = ServerInformation.POIDATA_SERVER + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=200" + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";
 
         var jqxhr = $.getJSON(serverUrl, function (data) {
             World.loadPoisFromJsonData(data);

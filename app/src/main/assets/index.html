@@ -29,56 +29,82 @@
 
     <!-- World logic-->
     <script type="text/javascript" src="js/fromwebservice.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-js/4.28.49/examples/sdk/tomtom.min.js" ></script>
+    <script src="js/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="js/mapbox-gl.css"/>
+
 </head>
 
 <body>
 <div data-role="page" id="page1" style="background: none;">
 
-<!-- MAIN PAGE CONTENT -->
+    <!-- MAIN PAGE CONTENT -->
 
-<!-- transparent footer-->
-<div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
-     style="text-align:center;">
+    <!-- transparent footer-->
+    <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
+         style="text-align:center;">
 
-    <!-- small status-button -->
-    <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup"
-       data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop"
-       data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
+        <!-- small status-button -->
+        <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup"
+           data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop"
+           data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
 
-    <!-- popup displayed when button clicked -->
-    <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
-         style="max-width:350px;">
-        <p style="text-align:right;" id="status-message">Trying to find out where you are</p>
+        <!-- popup displayed when button clicked -->
+        <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
+             style="max-width:350px;">
+            <p style="text-align:right;" id="status-message">Trying to find out where you are</p>
+        </div>
+
     </div>
 
-</div>
+    <!-- PANELS, ONLY VISIBLE ON DEMAND -->
 
-<!-- PANELS, ONLY VISIBLE ON DEMAND -->
+    <!-- panel containing POI detail information -->
+    <div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay"
+         style="background-color:#F0F0F0;" data-theme="c">
 
-<!-- panel containing POI detail information -->
-<div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay"
-     style="background-color:#F0F0F0;" data-theme="c">
+        <!-- header with "close" button -->
+        <div data-role="header" data-theme="c">
+            <h1>Details</h1>
+            <a href="#header" data-rel="close">Close</a>
+        </div>
 
-    <!-- header with "close" button -->
-    <div data-role="header" data-theme="c">
-        <h1>Details</h1>
-        <a href="#header" data-rel="close">Close</a>
+        <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
+        <div data-role="content">
+
+            <!-- title -->
+            <h3 id="poi-detail-title"></h3>
+
+            <!-- description -->
+            <h4 id="poi-detail-description"></h4>
+
+            <h4 id="poi-detail-category"></h4>
+
+            <!-- distance -->
+            <h4>Distance: <a id="poi-detail-distance"></a></h4>
+
+            <button id="mapBtn" onclick="displayMap();">Map me</button>
+
+        </div>
+
     </div>
 
-    <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
-    <div data-role="content">
+    <div data-role="panel" id="panel-map" data-position="right" data-display="overlay"
+         style="background-color:#F0F0F0;" data-theme="c">
+        <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
 
-        <!-- title -->
-        <h3 id="poi-detail-title"></h3>
+        <div data-role="header" data-theme="c">
+            <h1>Navigate</h1>
+            <a href="#header" data-rel="close">Close</a>
+        </div>
+        <div data-role="content">
 
-        <!-- description -->
-        <h4 id="poi-detail-description"></h4>
+            <h3 id="map" style="width:100%"></h3>
 
-        <h4 id="poi-detail-category"></h4>
+        </div>
 
-        <!-- distance -->
+        <script src="js/map.js"></script>
     </div>
-</div>
 
 </div>
 

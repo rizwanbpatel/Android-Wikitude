@@ -306,6 +306,9 @@ var World = {
     // helper to sort places by distance, descending
     sortByDistanceSortingDescending: function (a, b) {
         return b.distanceToUser - a.distanceToUser;
+    },
+    onDisplayMap : function(){
+        $("#panel-map").panel("open", 123);
     }
 };
 

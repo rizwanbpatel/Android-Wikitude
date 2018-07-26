@@ -17,6 +17,9 @@ var World = {
     // you may request new data from server periodically, however: in this sample data is only requested once
     isRequestingData: false,
 
+    //  user's latest known location, accessible via userLocation.latitude, userLocation.longitude, userLocation.altitude
+    userLocation: null,
+
     // true once data was fetched
     initiallyLoadedData: false,
 
@@ -39,6 +42,10 @@ var World = {
     // called to inject new POI data
     loadPoisFromJsonData: function loadPoisFromJsonDataFn(poiData) {
 
+        // show radar & set click-listener
+    	PoiRadar.show();
+    	$('#radarContainer').unbind('click');
+    	$("#radarContainer").click(PoiRadar.clickedRadar);
 
         World.angleDict.push({
                 "st_ang": 0,
@@ -152,6 +159,10 @@ var World = {
         World.updateDistanceToUserValues();
 
         World.updateStatusMessage(World.markerList.length + ' places loaded');
+
+        // set distance slider to 100%
+        $("#panel-distance-range").val(100);
+        $("#panel-distance-range").slider("refresh");
     },
 
     getAltitudeFromData: function getAltitudeFromData(angleDeg) {
@@ -191,6 +202,14 @@ var World = {
 
     // location updates, fired every time you call architectView.setLocation() in native environment
     locationChanged: function locationChangedFn(lat, lon, alt, acc) {
+
+    // store user's current location in World.userLocation, so you always know where user is
+    		World.userLocation = {
+    			'latitude': lat,
+    			'longitude': lon,
+    			'altitude': alt,
+    			'accuracy': acc
+    		};
 
         // request data if not already present
         if (!World.initiallyLoadedData) {
@@ -265,6 +284,86 @@ var World = {
         // return maximum distance times some factor >1.0 so ther is some room left and small movements of user don't cause places far away to disappear.
         return maxDistanceMeters * 1.1;
     },
+
+    // udpates values show in "range panel"
+    	updateRangeValues: function updateRangeValuesFn() {
+
+    		// get current slider value (0..100);
+    		var slider_value = $("#panel-distance-range").val();
+
+    		// max range relative to the maximum distance of all visible places
+    		var maxRangeMeters = Math.round(World.getMaxDistance() * (slider_value / 100));
+
+    		// range in meters including metric m/km
+    		var maxRangeValue = (maxRangeMeters > 999) ? ((maxRangeMeters / 1000).toFixed(2) + " km") : (Math.round(maxRangeMeters) + " m");
+
+    		// number of places within max-range
+    		var placesInRange = World.getNumberOfVisiblePlacesInRange(maxRangeMeters);
+
+    		// update UI labels accordingly
+    		$("#panel-distance-value").html(maxRangeValue);
+    		$("#panel-distance-places").html((placesInRange != 1) ? (placesInRange + " Places") : (placesInRange + " Place"));
+
+    		// update culling distance, so only places within given range are rendered
+    		AR.context.scene.cullingDistance = Math.max(maxRangeMeters, 1);
+
+    		// update radar's maxDistance so radius of radar is updated too
+    		PoiRadar.setMaxDistance(Math.max(maxRangeMeters, 1));
+    	},
+
+    	// returns number of places with same or lower distance than given range
+        	getNumberOfVisiblePlacesInRange: function getNumberOfVisiblePlacesInRangeFn(maxRangeMeters) {
+
+        		// sort markers by distance
+        		World.markerList.sort(World.sortByDistanceSorting);
+
+        		// loop through list and stop once a placemark is out of range ( -> very basic implementation )
+        		for (var i = 0; i < World.markerList.length; i++) {
+        			if (World.markerList[i].distanceToUser > maxRangeMeters) {
+        				return i;
+        			}
+        		};
+
+        		// in case no placemark is out of range -> all are visible
+        		return World.markerList.length;
+        	},
+
+        	handlePanelMovements: function handlePanelMovementsFn() {
+
+            		$("#panel-distance").on("panelclose", function(event, ui) {
+            			$("#radarContainer").addClass("radarContainer_left");
+            			$("#radarContainer").removeClass("radarContainer_right");
+            			PoiRadar.updatePosition();
+            		});
+
+            		$("#panel-distance").on("panelopen", function(event, ui) {
+            			$("#radarContainer").removeClass("radarContainer_left");
+            			$("#radarContainer").addClass("radarContainer_right");
+            			PoiRadar.updatePosition();
+            		});
+            	},
+
+        // display range slider
+        	showRange: function showRangeFn() {
+        		if (World.markerList.length > 0) {
+
+        			// update labels on every range movement
+        			$('#panel-distance-range').change(function() {
+        				World.updateRangeValues();
+        			});
+
+        			World.updateRangeValues();
+        			World.handlePanelMovements();
+
+        			// open panel
+        			$("#panel-distance").trigger("updatelayout");
+        			$("#panel-distance").panel("open", 1234);
+        		} else {
+
+        			// no places are visible, because the are not loaded yet
+        			World.updateStatusMessage('No places available yet', true);
+        		}
+        	},
 
     /*
         JQuery provides a number of tools to load data from a remote origin.

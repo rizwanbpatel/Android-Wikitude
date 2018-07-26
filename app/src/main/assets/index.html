@@ -15,10 +15,12 @@
     <script src="https://www.wikitude.com/libs/architect.js"></script>
     <script src="ade.js"></script>
 
-    <!-- jquery mobile CSS -->
+    <!-- positioning of poi-radar -->
     <link rel="stylesheet" href="jquery/jquery.mobile-1.3.2.min.css"/>
     <!-- required to set background transparent & enable "click through" -->
     <link rel="stylesheet" href="jquery/jquery-mobile-transparent-ui-overlay.css"/>
+
+    <link rel="stylesheet" href="jquery/poi-radar.css"/>
 
     <!-- jquery JS files -->
     <script type="text/javascript" src="jquery/jquery-1.9.1.min.js"></script>
@@ -27,14 +29,28 @@
     <!-- marker representation-->
     <script src="js/marker.js"></script>
 
+
+
     <!-- World logic-->
     <script type="text/javascript" src="js/fromwebservice.js"></script>
+
+    <!-- radar component -->
+    <script type="text/javascript" src="js/radar.js"></script>
 </head>
 
 <body>
 <div data-role="page" id="page1" style="background: none;">
 
 <!-- MAIN PAGE CONTENT -->
+
+    <!-- header of UI holding feature buttons -->
+    <div id ="header-status" data-role="header" data-position="fixed" data-theme="c">
+        <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-mini="true">Range</a>
+        <h1></h1>
+    </div>
+
+    <!-- the radar div - Wikitude SDK radar will be drawn into this div -->
+    <div class="radarContainer_left" id="radarContainer"></div>
 
 <!-- transparent footer-->
 <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
@@ -79,6 +95,29 @@
         <!-- distance -->
     </div>
 </div>
+
+    <!-- range panel -->
+    <div data-role="panel" id="panel-distance" data-position="left" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
+
+        <!-- header with close button -->
+        <div data-role="header" data-theme="c">
+            <h1>Range</h1>
+            <a href="#header" data-rel="close">Close</a>
+        </div>
+
+        <!-- distance information, calculated/updated in code  -->
+        <div data-role="content">
+
+            <!-- Range in m/km-->
+            <h4> Range: <a id="panel-distance-value"></a></h4>
+
+            <!-- Amount of visible places -->
+            <h4> Visible: <a id="panel-distance-places"></a></h4>
+
+            <!-- default slider -->
+            <input id="panel-distance-range" type="range" data-highlight="true" name="rangeSlider" min="0" max="100" value="100" data-show-value="false" step="5" data-popup-enabled="false">
+        </div>
+    </div>
 
 </div>
 

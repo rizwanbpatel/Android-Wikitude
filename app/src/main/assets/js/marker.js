@@ -19,7 +19,7 @@ function Marker(poiData) {
     var markerLocation = new AR.GeoLocation(poiData.latitude, poiData.longitude, poiData.altitude);
 
     // create an AR.ImageDrawable for the marker in idle state
-    this.markerDrawable_idle = new AR.ImageDrawable(World.markerDrawable_idle, 2.5, {
+    this.markerDrawable_idle = new AR.ImageDrawable(World.markerDrawable_idle, 5, {
         zOrder: 0,
         opacity: 0.25,
         /*
@@ -29,7 +29,7 @@ function Marker(poiData) {
     });
 
     // create an AR.ImageDrawable for the marker in selected state
-    this.markerDrawable_selected = new AR.ImageDrawable(World.markerDrawable_selected, 2.5, {
+    this.markerDrawable_selected = new AR.ImageDrawable(World.markerDrawable_selected, 5, {
         zOrder: 0,
         opacity: 1.0,
         onClick: null
@@ -66,7 +66,11 @@ function Marker(poiData) {
     }
     else if (poiData.category.toUpperCase().includes("POST_OFFICE")) {
         this.imageLable = World.post_office;
-    } else {
+    }else if (poiData.category.toUpperCase().includes("HOTEL_MOTEL")) {
+        this.imageLable = World.hotel;
+    }else if (poiData.category.toUpperCase().includes("AIRPORT")) {
+        this.imageLable = World.airport;
+    }else {
         this.imageLable = World.default;
     }
 

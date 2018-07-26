@@ -1,11 +1,17 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
 
-    POIDATA_SERVER: "https://api.tomtom.com/search/2/nearbySearch/.json",
+    //POIDATA_SERVER: "https://api.tomtom.com/search/2/nearbySearch/",
+    POIDATA_SERVER: "https://api.tomtom.com/search/2/categorySearch/",
     POIDATA_SERVER_ARG_LAT: "lat",
     POIDATA_SERVER_ARG_LON: "lon",
     POIDATA_SERVER_ARG_NR_POIS: "nrPois",
-    POIDATA_SERVER_ARG_RADIUS: "radius"
+    POIDATA_SERVER_ARG_RADIUS: "radius",
+    POIDATA_CATEGORY: "",
+    POIDATA_EXT: ".json",
+    POI_RADIUS_VALUE: "525",
+    POIDATA_NEARBY_SEARCH: "https://api.tomtom.com/search/2/nearbySearch/",
+
 };
 
 // implementation of AR-Experience (aka "World")
@@ -25,7 +31,10 @@ var World = {
     markerDrawable_selected: null,
     markerDrawable_directionIndicator: null,
 
-    // list of AR.GeoObjects that are currently shown in the scene / World
+    //nearby loader
+    isNearbySearchEnable: false,
+
+// list of AR.GeoObjects that are currently shown in the scene / World
     markerList: [],
 
     angleDict: [],
@@ -36,70 +45,83 @@ var World = {
     locationUpdateCounter: 0,
     updatePlacemarkDistancesEveryXLocationUpdates: 10,
 
+
+    clearARViewMarkers: function clearARViewMarkersFn(){
+
+        if(World.markerList.length != 0){
+            for (var i = 0; i < World.markerList.length; i++){
+                var markerElement = World.markerList[i];
+                markerElement.markerObject.enabled = false;
+                //markerElement.markerObject.remove();
+            }
+
+        }
+    },
     // called to inject new POI data
     loadPoisFromJsonData: function loadPoisFromJsonDataFn(poiData) {
+        // empty list of visible markers
+        World.clearARViewMarkers();
 
+        World.markerList = [];
 
         World.angleDict.push({
                 "st_ang": 0,
-                "end_ang": 20, "altitude": 0
+                "end_ang": 20, "altitude": 525
             }, {
                 "st_ang": 21,
-                "end_ang": 40, "altitude": 500
+                "end_ang": 40, "altitude": 525
             }, {
                 "st_ang": 41,
-                "end_ang": 60, "altitude": 500
+                "end_ang": 60, "altitude": 525
             }, {
                 "st_ang": 61,
-                "end_ang": 80, "altitude": 500
+                "end_ang": 80, "altitude": 525
             },
             {
                 "st_ang": 81,
-                "end_ang": 100, "altitude": 500
+                "end_ang": 100, "altitude": 525
             }, {
                 "st_ang": 101,
-                "end_ang": 120, "altitude": 500
+                "end_ang": 120, "altitude": 525
             }, {
                 "st_ang": 121,
-                "end_ang": 140, "altitude": 500
+                "end_ang": 140, "altitude": 525
             }, {
                 "st_ang": 141,
-                "end_ang": 160, "altitude": 500
+                "end_ang": 160, "altitude": 525
             }, {
                 "st_ang": 161,
-                "end_ang": 180, "altitude": 500
+                "end_ang": 180, "altitude": 525
             }, {
                 "st_ang": 181,
-                "end_ang": 200, "altitude": 500
+                "end_ang": 200, "altitude": 525
             }, {
                 "st_ang": 201,
-                "end_ang": 220, "altitude": 500
+                "end_ang": 220, "altitude": 525
             }, {
                 "st_ang": 221,
-                "end_ang": 240, "altitude": 500
+                "end_ang": 240, "altitude": 525
             }, {
                 "st_ang": 241,
-                "end_ang": 260, "altitude": 500
+                "end_ang": 260, "altitude": 525
             }, {
                 "st_ang": 261,
-                "end_ang": 280, "altitude": 500
+                "end_ang": 280, "altitude": 525
             }, {
                 "st_ang": 281,
-                "end_ang": 300, "altitude": 500
+                "end_ang": 300, "altitude": 525
             }, {
                 "st_ang": 301,
-                "end_ang": 320, "altitude": 500
+                "end_ang": 320, "altitude": 525
             }, {
                 "st_ang": 321,
-                "end_ang": 240, "altitude": 500
+                "end_ang": 240, "altitude": 525
             }, {
                 "st_ang": 341,
-                "end_ang": 360, "altitude": 500
+                "end_ang": 360, "altitude": 525
             }
         );
 
-        // empty list of visible markers
-        World.markerList = [];
         resultList = poiData.results;
         // start loading marker assets
         World.markerDrawable_idle = new AR.ImageResource("assets/marker_idle.png");
@@ -116,6 +138,7 @@ var World = {
         World.temple = new AR.ImageResource("assets/logos/temple.png");
         World.gov = new AR.ImageResource("assets/logos/museum.png");
         World.default = new AR.ImageResource("assets/default.png");
+        World.airport = new AR.ImageResource("assets/logos/airport.png");
 
         // loop through POI-information and create an AR.GeoObject (=Marker) per POI
         /*for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
@@ -158,7 +181,7 @@ var World = {
         var alti = 0;
         for (var i = 0; i < World.angleDict.length; i++) {
             if (angleDeg >= World.angleDict[i].st_ang && angleDeg <= World.angleDict[i].end_ang) {
-                World.angleDict[i].altitude = World.angleDict[i].altitude + 10;
+                World.angleDict[i].altitude = World.currentAlt + 10;
                 alti = World.angleDict[i].altitude;
                 break;
             }
@@ -207,6 +230,26 @@ var World = {
         World.locationUpdateCounter = (++World.locationUpdateCounter % World.updatePlacemarkDistancesEveryXLocationUpdates);
     },
 
+    loadHotels: function loadHotelsFn() {
+        ServerInformation.POIDATA_CATEGORY = "hotel";
+        ServerInformation.POI_RADIUS_VALUE = "525";
+        World.isNearbySearchEnable = false;
+        World.requestDataFromServer(World.currentLat, World.currentLon);
+    },
+
+    loadAirports: function loadAirportFn() {
+        ServerInformation.POIDATA_CATEGORY = "airport";
+        ServerInformation.POI_RADIUS_VALUE = "10000";
+        World.isNearbySearchEnable = false;
+        World.requestDataFromServer(World.currentLat, World.currentLon);
+    },
+
+    loadAllNearBy: function loadAllNearByFn(){
+        ServerInformation.POIDATA_CATEGORY = "";
+        ServerInformation.POI_RADIUS_VALUE = "600";
+        World.isNearbySearchEnable = true;
+        World.requestDataFromServer(World.currentLat, World.currentLon);
+    },
     /*
         POIs usually have a name and sometimes a quite long description.
         Depending on your content type you may e.g. display a marker with its name and cropped description but allow the user to get more information after selecting it.
@@ -283,19 +326,34 @@ var World = {
         World.isRequestingData = true;
         World.updateStatusMessage('Requesting places from web-service');
 
+        var serverUrl =ServerInformation.POIDATA_SERVER + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";;
         // server-url to JSON content provider
-        var serverUrl = ServerInformation.POIDATA_SERVER + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=200" + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";
-
-        var jqxhr = $.getJSON(serverUrl, function (data) {
-            World.loadPoisFromJsonData(data);
-        })
-            .error(function (err) {
-                World.updateStatusMessage("Invalid web-service response.", true);
-                World.isRequestingData = false;
+        if(World.isNearbySearchEnable){
+             serverUrl = ServerInformation.POIDATA_NEARBY_SEARCH + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=35&language=en-GB";
+            var jqxhr = $.getJSON(serverUrl, function (data) {
+                World.loadPoisFromJsonData(data);
             })
-            .complete(function () {
-                World.isRequestingData = false;
-            });
+                .error(function (err) {
+                    World.updateStatusMessage("", true);
+                    World.isRequestingData = false;
+                })
+                .complete(function () {
+                    World.isRequestingData = false;
+                });
+        }else {
+             serverUrl = ServerInformation.POIDATA_SERVER + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";
+            var jqxhr = $.getJSON(serverUrl, function (data) {
+                World.loadPoisFromJsonData(data);
+            })
+                .error(function (err) {
+                    World.updateStatusMessage("", true);
+                    World.isRequestingData = false;
+                })
+                .complete(function () {
+                    World.isRequestingData = false;
+                });
+        }
+
     },
 
     // helper to sort places by distance

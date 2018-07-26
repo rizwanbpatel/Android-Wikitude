@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import com.wikitude.architect.ArchitectStartupConfiguration;
 import com.wikitude.architect.ArchitectView;
 
@@ -45,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null && MainActivity.this.architectView != null) {
                     // check if location has altitude at certain accuracy level & call right architect method (the one with altitude information)
                     if (location.hasAltitude() && location.hasAccuracy()) {
+                        Log.d("LocationListener","Location has altitude and setting up" + location.getAltitude());
                         MainActivity.this.architectView.setLocation(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
                     } else {
+                        Log.d("LocationListener","Location has altitude and setting up" + location.getAltitude());
                         MainActivity.this.architectView.setLocation( location.getLatitude(), location.getLongitude(), location.hasAccuracy() ? location.getAccuracy() : 1000 );
                     }
                 }

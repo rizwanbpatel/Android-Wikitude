@@ -34,51 +34,63 @@
 <body>
 <div data-role="page" id="page1" style="background: none;">
 
-<!-- MAIN PAGE CONTENT -->
+    <!-- MAIN PAGE CONTENT -->
 
-<!-- transparent footer-->
-<div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
-     style="text-align:center;">
+    <!-- transparent footer-->
+    <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
+         style="text-align:center;">
 
-    <!-- small status-button -->
-    <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup"
-       data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop"
-       data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
+        <!-- small status-button -->
+        <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup"
+           data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop"
+           data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
 
-    <!-- popup displayed when button clicked -->
-    <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
-         style="max-width:350px;">
-        <p style="text-align:right;" id="status-message">Trying to find out where you are</p>
+        <!-- popup displayed when button clicked -->
+        <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
+             style="max-width:350px;">
+
+            <fieldset data-role="controlgroup">
+                <legend>Choose Category :</legend>
+                <input type="radio" name="category_rb" id="hotel" value="hotel" onclick="World.loadHotels()"/>
+                <label for="hotel">Hotel</label>
+
+                <input type="radio" name="category_rb" id="airport" value="airport" onclick="World.loadAirports()"/>
+                <label for="airport">Airport</label>
+
+                <input type="radio" name="category_rb" id="nearby" value="nearby" onclick="World.loadAllNearBy()"/>
+                <label for="nearby">All Nearby</label>
+            </fieldset>
+            <p style="text-align:right;" id="status-message"></p>
+        </div>
+
     </div>
 
-</div>
+    <!-- PANELS, ONLY VISIBLE ON DEMAND -->
 
-<!-- PANELS, ONLY VISIBLE ON DEMAND -->
+    <!-- panel containing POI detail information -->
+    <div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay"
+         style="background-color:#F0F0F0; opacity:0.65;" data-theme="c">
 
-<!-- panel containing POI detail information -->
-<div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay"
-     style="background-color:#F0F0F0;" data-theme="c">
+        <!-- header with "close" button -->
+        <div data-role="header" data-theme="c">
+            <h1>Details</h1>
+            <a href="#header" data-rel="close">Close</a>
+        </div>
 
-    <!-- header with "close" button -->
-    <div data-role="header" data-theme="c">
-        <h1>Details</h1>
-        <a href="#header" data-rel="close">Close</a>
+        <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
+        <div data-role="content">
+
+            <!-- title -->
+            <h3 id="poi-detail-title"></h3>
+
+            <!-- description -->
+            <h4 id="poi-detail-description"></h4>
+
+            <h4 id="poi-detail-category"></h4>
+
+            <!-- distance -->
+        </div>
     </div>
-
-    <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
-    <div data-role="content">
-
-        <!-- title -->
-        <h3 id="poi-detail-title"></h3>
-
-        <!-- description -->
-        <h4 id="poi-detail-description"></h4>
-
-        <h4 id="poi-detail-category"></h4>
-
-        <!-- distance -->
-    </div>
-</div>
 
 </div>
 

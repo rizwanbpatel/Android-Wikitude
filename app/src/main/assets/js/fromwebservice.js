@@ -326,10 +326,10 @@ var World = {
         World.isRequestingData = true;
         World.updateStatusMessage('Requesting places from web-service');
 
-        var serverUrl =ServerInformation.POIDATA_SERVER + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";;
+        var serverUrl =ServerInformation.POIDATA_SERVER + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOk&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=25&language=en-GB";;
         // server-url to JSON content provider
         if(World.isNearbySearchEnable){
-             serverUrl = ServerInformation.POIDATA_NEARBY_SEARCH + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOi&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=35&language=en-GB";
+             serverUrl = ServerInformation.POIDATA_NEARBY_SEARCH + ServerInformation.POIDATA_CATEGORY + ServerInformation.POIDATA_EXT + "?key=PQoRU6eDPhcI7zJI1faRAGH5NG0BJUOk&" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_RADIUS + "=" + ServerInformation.POI_RADIUS_VALUE + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&limit=35&language=en-GB";
             var jqxhr = $.getJSON(serverUrl, function (data) {
                 World.loadPoisFromJsonData(data);
             })

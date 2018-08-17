@@ -25,6 +25,9 @@
     <!-- jquery JS files -->
     <script type="text/javascript" src="jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="jquery/jquery.mobile-1.3.2.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/map.css" />
+        <link rel="stylesheet" type="text/css" href="css/elements.css">
+        <script src="js/tomtom.min.js"></script>
 
     <!-- marker representation-->
     <script src="js/marker.js"></script>    
@@ -81,7 +84,7 @@
             <!-- PANELS, ONLY VISIBLE ON DEMAND -->
 
             <!-- panel containing POI detail information -->
-            <div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
+            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
 
                 <!-- header with "close" button -->
                 <div data-role="header" data-theme="c">
@@ -102,10 +105,22 @@
                     <!-- distance -->
                     <h4>Distance: <a id="poi-detail-distance"></a></h4>
                 </div>
+                <div data-role= "footer" id="map"
+                     style="width: inherit; height: 200px;  border: 1px; border-style: solid; border-color: red;"></div>
             </div>
 
 
+            <script>
 
+                var map = L.map("map",
+                                    {
+                                        key : "b5w0ip0dC0PPuyZ75hbmUPBcQK7IhO0V",
+                                         source: ["vector"],
+                                        glyphsUrl : "https://api.tomtom.com/maps-sdk-js/glyphs/v1/{fontstack}/{range}.pbf",
+                                        spriteUrl : "https://api.tomtom.com/maps-sdk-js/sprites/v1/sprite"
+                                    }, 18);
+                var markerPoi;
+            </script>
             <!-- range panel -->
             <div data-role="panel" id="panel-distance" data-position="left" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
 

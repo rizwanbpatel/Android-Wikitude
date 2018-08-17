@@ -1,0 +1,454 @@
+
+/* ----------------------------------------------------------------------------------
+    INPUT PLACEHOLDERS STYLE
+------------------------------------------------------------------------------------*/
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #ddd;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ddd;
+    opacity: 1;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ddd;
+    opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #ddd;
+}
+
+
+/* ----------------------------------------------------------------------------------
+    INPUT STYLE
+------------------------------------------------------------------------------------*/
+
+.sidepanel, #tomtom-example-results {
+    width: 220px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+
+    font-size: 13px;
+}
+
+#tomtom-example-results {
+    background: white;
+    height: auto;
+    margin: 0;
+    max-height: 90%;
+    padding: 10px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+/* showing */
+.tomtom-route-instructions-example-group-instruction {
+    font-weight: bold;
+}
+
+#tomtom-example-results {
+    width: 200px;
+    transition: width ease-in 0.1s;
+}
+
+#tomtom-example-results h4 {
+    margin: 10px 0;
+    transition: margin ease-in 0.3s;
+    transition-delay: 0.1s;
+}
+
+#tomtom-example-results #tomtom-example-resultsWrapper {
+    animation-duration: 0.3s;
+    animation-delay: 0.1s;
+    animation-name: slideout;
+    /* We don't want to change this animation method to transition because of
+     * the property below. Setting max-height directly to 100vh may make some
+     * results unreachable for user (e.g when limit is 100), so when we set
+     * fill-mode to none, max-height has no value (inherit) after animation
+     * which solves our problem. */
+    animation-fill-mode: backwards;
+}
+
+/* hiding */
+#tomtom-example-results.collapsed {
+    width: 160px;
+    transition: width ease-in 0.1s;
+    transition-delay: 0.3s;
+}
+.og-context #tomtom-example-results.collapsed {
+    width: 130px;
+}
+
+#tomtom-example-results.collapsed h4 {
+    margin: 0;
+    transition: margin ease-in 0.3s;
+    transition-delay: 0s;
+}
+
+#tomtom-example-results.collapsed #tomtom-example-resultsWrapper {
+    max-height: 0vh;
+    animation-duration: 0.3s;
+    animation-delay: 0s;
+    animation-name: slidein;
+    animation-fill-mode: both;
+}
+
+#tomtom-example-results.collapsed #tomtom-example-results-show {
+    background: none;
+    border: 0;
+    color: gray;
+    display: inline-block;
+    font-size: 13px;
+    text-decoration: underline;
+    margin: 0 auto;
+}
+
+#tomtom-example-results #tomtom-example-results-show,
+#tomtom-example-results.collapsed .leaflet-popup-close-button {
+    display: none;
+}
+
+@keyframes slideout {
+    from {
+        max-height: 0vh;
+    }
+    to {
+        max-height: 100vh;
+    }
+}
+
+@keyframes slidein {
+    from {
+        max-height: 100vh;
+    }
+    to {
+        max-height: 0vh;
+    }
+}
+
+#tomtom-example-resultsWrapper > div {
+    border-bottom: 3px solid #666;
+    cursor: pointer;
+    padding: 4px 5px;
+}
+
+#tomtom-example-resultsWrapper > div:last-child {
+    border: none;
+}
+
+#tomtom-example-resultsWrapper, .sidepanelWrapper {
+    display: block;
+    vertical-align: top;
+    overflow: hidden;
+}
+.sidepanelWrapper {
+    max-width: 100%;
+}
+
+.sidepanelWrapper > div > span {
+    display: block;
+}
+
+.sidepanel input {
+    position: relative;
+    line-height: 40px;
+    display: block;
+
+    border: none;
+    border-radius: 0;
+    padding: 0;
+
+    z-index: 10;
+    background: transparent;
+    color: #555;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-touch-callout: none;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.sidepanel input[type=range] {
+    margin: 0 10px;
+    width: calc(100% - 20px);
+}
+
+.sidepanel input[type=range]::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    border-width: 10px 0;
+    color: transparent;
+    height: 5px;
+}
+
+.sidepanel input[type=range]::-ms-fill-lower,
+.sidepanel input[type=range]::-ms-fill-upper,
+.sidepanel input[type=range]:focus::-ms-fill-lower,
+.sidepanel input[type=range]:focus::-ms-fill-upper {
+    background-color: #ddd;
+    border-radius: 0;
+}
+
+.sidepanel input[type=range]::-ms-thumb {
+    background: #ddd;
+    border: solid 1px #777;
+    height: 20px;
+    width: 8px;
+}
+
+.sidepanel input:not([type=radio]) {
+    height: 40px;
+}
+
+.sidepanel input[type=radio] {
+    display: inline-block;
+    vertical-align: middle;
+    width: auto;
+    margin: 10px 5px;
+    -webkit-appearance: radio !important;
+}
+
+.sidepanel input[type=submit] {
+    background: #94B208;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.sidepanel input[type=text] {
+    width: calc(100% - 35px);
+    padding-left: 10px;
+    padding-right: 25px;
+}
+
+.sidepanel input:focus {
+    outline: none;
+    opacity: 1;
+    -webkit-transition-delay: 0.3s;
+    transition-delay: 0.3s;
+}
+
+.sidepanel label {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    color: #888;
+    font-weight: bold;
+    font-size: 85%;
+    text-align: left;
+    line-height: 30px;
+    padding: 0 10px;
+    border-top:2px;
+    border-top-style: solid !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.sidepanel label:before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 90deg);
+    -ms-transform:  perspective(1000px) rotate3d(1, 0, 0, 90deg) !important;
+    transform: perspective(1000px) rotate3d(1, 0, 0, 90deg);
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    -webkit-transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
+}
+
+
+
+.sidepanel input:not([type=radio]):not([type=range]):focus + label:before {
+    width: calc(100% - 20px);
+    background: #94B208;
+    -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 0deg);
+    transform: perspective(1000px) rotate3d(1, 0, 0, 0deg);
+    -ms-transform:  perspective(1000px) rotate3d(1, 0, 0, 0deg) !important;
+}
+
+.sidepanel input:not([type=radio]):not([type=range]):focus + label {
+    pointer-events: none;
+}
+
+.sidepanel input:not([type=radio]):not([type=range]):focus + label:after {
+    -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, -90deg);
+    transform: perspective(1000px) rotate3d(1, 0, 0, -90deg);
+}
+
+.sidepanel input[type=checkbox] {
+    height: 20px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right:8px;
+    margin-top: 6px;
+}
+
+label.checkbox-label  {
+    border-top:0px !important;
+}
+
+label[for="tomtom-example-langCodesList"] {
+    margin-top:10px;
+}
+
+
+.sidepanel input:required:invalid,
+.sidepanel input:focus:invalid {
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.sidepanel input:required:invalid + label:before,
+.sidepanel input:focus:invalid + label:before,
+.sidepanel input:required:valid + label:before,
+.sidepanel input:required:invalid,
+.sidepanel input:focus:invalid {
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.sidepanel input:required:invalid,
+.sidepanel input:focus:invalid {
+    background-image: url(./img/invalid.png);
+}
+
+.sidepanel input:required:valid + label:before {
+    background-image: url(./img/valid.png);
+}
+.sidepanel select {
+    width: 100%;
+}
+
+
+.use-all-space {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.flex-expand {
+    flex: 1;
+}
+.flex-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidepanel {
+    width: 310px;
+    vertical-align: top;
+    padding: 0 10px;
+    overflow-y: auto;
+}
+.sidepanel h4 {
+    margin: 10px 0;
+}
+.sidepanel .sidepanel-input-group {
+    margin: 20px 0;
+}
+.sidepanel .sidepanel-input-group label,
+.sidepanel .sidepanel-input-group input,
+.sidepanel .sidepanel-input-group select {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+}
+.sidepanel .sidepanel-input-group label {
+    font-size: 13px;
+    color: #888;
+}
+
+.tt-results__groupname {
+    font-weight: bold;
+    margin-top: 10px;
+}
+.tt-results__steps ol {
+    list-style-type: decimal;
+}
+
+.tomtom-example-inputsWrapper {
+    background: #fff;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .3);
+    white-space: nowrap;
+    user-select: none;
+}
+.tomtom-example-inputsWrapper label {
+    margin-bottom: 0px;
+}
+.tomtom-example-inputsWrapper h2 {
+    margin: 4px 5px 2px;
+}
+
+.map-container {
+    position: relative;
+}
+.map-container .tomtom-example-inputsWrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+.map-container .tomtom-example-inputsWrapper-bottom {
+    top: auto;
+    bottom: 10px;
+}
+.map-container .tomtom-example-inputsWrapper .input-container {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}
+.map-container .tomtom-example-inputsWrapper .input-container > label {
+    margin-right: 8px;
+}
+.map-container .tomtom-example-inputsWrapper .input-container > input,
+.map-container .tomtom-example-inputsWrapper .input-container > select,
+.map-container .tomtom-example-inputsWrapper .input-container > textarea {
+    flex-basis: 1;
+}
+.map-container .leaflet-container {
+    z-index: 0;
+}
+
+.leaflet-container:not(.leaflet-touch) .leaflet-control-zoomslider a {
+    width: 23px;
+}
+
+div.leaflet-container .leaflet-control-zoomslider {
+    margin-left: 14px;
+}
+
+/* Rome date-time picker */
+.rd-container {
+    left: auto !important;
+    right: 10px !important;
+    top: 35px !important;
+}

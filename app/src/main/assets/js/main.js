@@ -257,7 +257,10 @@ var World = {
 	// fired when user pressed maker in cam
 	onMarkerSelected: function onMarkerSelectedFn(marker) {
 		World.currentMarker = marker;
-
+        var lat = marker.markerObject.locations[0].latitude;
+        var lon = marker.markerObject.locations[0].longitude;
+        map.invalidateSize();
+        map.setView(new L.LatLng(lat,lon), 18);
 		// update panel values
 		$("#poi-detail-title").html(marker.poiData.title);
 		$("#poi-detail-description").html(marker.poiData.description);
@@ -271,12 +274,18 @@ var World = {
 
 		$("#poi-detail-distance").html(distanceToUserValue);
 
+
+
+        if(markerPoi != undefined){
+            map.removeLayer(markerPoi);
+        }
+        markerPoi = L.marker([lat,lon]).addTo(map);
 		// show panel
-		$("#panel-poidetail").panel("open", 123);
+		$("#panel-poidetail").popup("open", 123);
 		
 		$( ".ui-panel-dismiss" ).unbind("mousedown");
 
-		$("#panel-poidetail").on("panelbeforeclose", function(event, ui) {
+		$("#panel-poidetail").on("popupafterclose", function(event, ui) {
 			World.currentMarker.setDeselected(World.currentMarker);
 		});
 	},

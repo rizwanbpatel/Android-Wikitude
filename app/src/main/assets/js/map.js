@@ -10,20 +10,6 @@ var map = L
 
 map.locate({setView: true, maxZoom: 15});
 
-/*
- * Added Reports layer 
- */
-/*var imported = document.createElement('script');
-imported.src = 'js/ReportsLayer.js';
-document.head.appendChild(imported);*/
-
-/*
- * Location search layer
- */
-var imported = document.createElement('script');
-imported.src = 'js/SearchLayer.js';
-document.head.appendChild(imported);
-
 
 
 

@@ -119,7 +119,18 @@
                                         glyphsUrl : "https://api.tomtom.com/maps-sdk-js/glyphs/v1/{fontstack}/{range}.pbf",
                                         spriteUrl : "https://api.tomtom.com/maps-sdk-js/sprites/v1/sprite"
                                     }, 18);
-                var markerPoi;
+                var markerAdded;
+                var startMarker;
+                var endMarker;
+                var startIcon = new tomtom.L.icon({
+                    iconUrl: "assets/start.png",
+                    iconSize: [34, 34]
+                });
+
+                var endIcon = new tomtom.L.icon({
+                    iconUrl: "assets/end.png",
+                    iconSize: [34, 34]
+                });
             </script>
             <!-- range panel -->
             <div data-role="panel" id="panel-distance" data-position="left" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">

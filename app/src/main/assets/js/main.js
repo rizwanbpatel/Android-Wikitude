@@ -8,7 +8,7 @@ var ServerInformation = {
         POIDATA_SERVER_ARG_RADIUS: "radius",
         POIDATA_CATEGORY: "",
         POIDATA_EXT: ".json",
-        POI_RADIUS_VALUE: "525",
+        POI_RADIUS_VALUE: "52500",
         POIDATA_NEARBY_SEARCH: "https://api.tomtom.com/search/2/nearbySearch/",
 };
 
@@ -42,6 +42,8 @@ var World = {
 	locationUpdateCounter: 0,
 	updatePlacemarkDistancesEveryXLocationUpdates: 10,
 
+	routeOnMapView : null,
+
 	clearARViewMarkers: function clearARViewMarkersFn(){
 
             if(World.markerList.length != 0){
@@ -60,6 +62,7 @@ var World = {
 
 	    // empty list of visible markers
         World.clearARViewMarkers();
+       // World.routeOnMapView.addTo(map);
 
         World.angleDict.push({
                 "st_ang": 0,
@@ -254,13 +257,75 @@ var World = {
         World.requestDataFromServer(World.currentLat, World.currentLon);
     },
 
+    addMarkers: function (feature) {
+        var startPoint, endPoint;
+        if (feature.geometry.type === 'MultiLineString') {
+            startPoint = feature.geometry.coordinates[0][0].reverse(); //get first point from first line
+            endPoint = feature.geometry.coordinates.slice(-1)[0].slice(-1)[0].reverse(); //get last point from last line
+        } else {
+            startPoint = feature.geometry.coordinates[0].reverse();
+            endPoint = feature.geometry.coordinates.slice(-1)[0].reverse();
+        }
+       // tomtom.L.marker(startPoint, {icon: startIcon}).addTo(map);
+       // tomtom.L.marker(endPoint, {icon: endIcon}).addTo(map);
+    },
 	// fired when user pressed maker in cam
 	onMarkerSelected: function onMarkerSelectedFn(marker) {
+
+
+
 		World.currentMarker = marker;
         var lat = marker.markerObject.locations[0].latitude;
         var lon = marker.markerObject.locations[0].longitude;
         map.invalidateSize();
-        map.setView(new L.LatLng(lat,lon), 18);
+        map.setView(new L.LatLng(lat,lon), 15);
+        var routeString = '' + lat + ',' + lon + ':' + World.currentLat+ ',' + World.currentLon + '';
+//        alert(routeString);
+        //routing
+        /*tomtom.routing({
+            traffic: false
+        }).locations(routeString)
+            .go().then(function(routeJson) {
+                var route = tomtom.L.geoJson(routeJson, {
+                 //   onEachFeature: addMarkers,
+                    style: {color: '#00d7ff', opacity: 0.8}
+                }).addTo(map);
+         map.fitBounds(route.getBounds(), {padding: [5, 5]});
+        });*/
+
+        if(World.routeOnMapView == null){
+            World.routeOnMapView = (tomtom.routeOnMap(/*{
+                                      startMarker: {
+                                             icon: tomtom.L.icon({
+                                                 iconUrl: 'assets/start.png',
+                                                 iconSize: [10, 10],
+                                                 iconAnchor: [15, 15]
+                                             })
+                                         },
+                                         // Options for the route end marker
+                                         endMarker: {
+                                             icon: tomtom.L.icon({
+                                                 iconUrl: 'assets/end.png',
+                                                 iconSize: [10, 10],
+                                                 iconAnchor: [15, 15]
+                                             })
+                                         }
+
+            }*/)).addTo(map);
+        }
+        World.routeOnMapView.clear();
+        if(markerAdded ){
+            map.removeLayer(startMarker);
+            map.removeLayer(endMarker);
+        }
+        endMarker = L.marker([lat,lon],{icon:endIcon}).addTo(map);
+        startMarker = L.marker([World.currentLat,World.currentLon],{icon:startIcon}).addTo(map);
+        markerAdded = true;
+        World.routeOnMapView.createRoute(routeString);
+        World.routeOnMapView.fitMapBoundsToRoute();
+
+
+
 		// update panel values
 		$("#poi-detail-title").html(marker.poiData.title);
 		$("#poi-detail-description").html(marker.poiData.description);
@@ -276,10 +341,7 @@ var World = {
 
 
 
-        if(markerPoi != undefined){
-            map.removeLayer(markerPoi);
-        }
-        markerPoi = L.marker([lat,lon]).addTo(map);
+
 		// show panel
 		$("#panel-poidetail").popup("open", 123);
 		

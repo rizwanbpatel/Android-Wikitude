@@ -85,30 +85,27 @@
             <!-- PANELS, ONLY VISIBLE ON DEMAND -->
 
             <!-- panel containing POI detail information -->
-            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
+            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="background-color:#F0F0F0; width: 300px" data-theme="c">
 
                 <!-- header with "close" button -->
-                <div data-role="header" data-theme="c">
+                <div data-role="header" style="width: inherit;" data-theme="c">
                     <h1>Details</h1>
                     <a href="#header" data-rel="close">Close</a>
                 </div>
 
                 <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
-                 <div data-role="content">
+
+                <div data-role= "content" id="map"
+                     style="width: inherit; height: 500px;  border: 1px; border-style: solid; border-color: red;"></div>
+
+                <div data-role="footer" style="width: inherit;">
 
                     <!-- title -->
                     <h3 id="poi-detail-title"></h3>
 
                     <!-- description -->
-                    <h4 id="poi-detail-description"></h4>
-
-                     <!-- <h4 id="poi-detail-category"></h4>
-                     &lt;!&ndash; distance &ndash;&gt;
-                     <h4>Distance: <a id="poi-detail-distance"></a></h4>-->
-                     <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>
+                    <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>
                 </div>
-                <div data-role= "footer" id="map"
-                     style="width: inherit; height: 200px;  border: 1px; border-style: solid; border-color: red;"></div>
             </div>
 
 

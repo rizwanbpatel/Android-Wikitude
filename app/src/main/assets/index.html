@@ -47,6 +47,7 @@
             <!-- header of UI holding feature buttons -->
             <div id ="header-status" data-role="header" data-position="fixed" data-theme="c">
                 <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-mini="true">Range</a>
+                <a href="javascript: World.stopRoute();" data-role="button" data-inline="true" data-mini="true">Stop</a>
                 <h1></h1>
             </div>
 
@@ -101,9 +102,10 @@
                     <!-- description -->
                     <h4 id="poi-detail-description"></h4>
 
-                     <h4 id="poi-detail-category"></h4>
-                    <!-- distance -->
-                    <h4>Distance: <a id="poi-detail-distance"></a></h4>
+                     <!-- <h4 id="poi-detail-category"></h4>
+                     &lt;!&ndash; distance &ndash;&gt;
+                     <h4>Distance: <a id="poi-detail-distance"></a></h4>-->
+                     <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>
                 </div>
                 <div data-role= "footer" id="map"
                      style="width: inherit; height: 200px;  border: 1px; border-style: solid; border-color: red;"></div>

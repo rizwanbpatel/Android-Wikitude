@@ -58,7 +58,7 @@
             <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed" style="text-align:center;">
 
                 <!-- small status-button -->
-                <a style="text-align:right;" id="popupInfoButton" href="#popupInfo"  data-role="button" data-inline="true" data-transition="pop" data-icon="home"  data-iconpos="notext">Log</a> </p>
+                <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup" data-role="button" data-inline="true" data-transition="pop" data-icon="home"  data-iconpos="notext">Log</a> </p>
 
                 <!-- popup displayed when button clicked -->
                 <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
@@ -85,7 +85,7 @@
             <!-- PANELS, ONLY VISIBLE ON DEMAND -->
 
             <!-- panel containing POI detail information -->
-            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="background-color:#F0F0F0; width: 300px" data-theme="c">
+            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="width: 300px; height: 400px;" data-theme="c">
 
                 <!-- header with "close" button -->
                 <div data-role="header" style="width: inherit;" data-theme="c">
@@ -95,16 +95,15 @@
 
                 <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
 
-                <div data-role= "content" id="map"
-                     style="width: inherit; height: 500px;  border: 1px; border-style: solid; border-color: red;"></div>
+                <div data-role= "content" id="map" style=" height: 75%;"></div>
 
-                <div data-role="footer" style="width: inherit;">
+                <div data-role="footer" style="width: inherit;" data-theme="c">
 
                     <!-- title -->
                     <h3 id="poi-detail-title"></h3>
 
                     <!-- description -->
-                    <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>
+                   <!-- <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>-->
                 </div>
             </div>
 

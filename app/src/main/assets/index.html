@@ -60,7 +60,7 @@
                 <!-- small status-button -->
                 <a style="text-align: center;" id="popupInfoButton" href="#popupInfo" data-rel="popup" data-role="button" data-inline="true" data-transition="pop" data-icon="home"  data-iconpos="notext">Log</a> </p>
 
-                <a class="ui-btn-right" style="margin-right:5%" id="reportInfoButton" href="#popupInfo" data-rel="popup" data-role="button"  data-inline="true" data-transition="pop" data-icon="edit" data-theme="b" data-iconpos="notext">report</a> </p>
+                <a class="ui-btn-right" style="margin-right:5%" id="reportInfoButton" href="#reportInfo" data-rel="popup" data-role="button"  data-inline="true" data-transition="pop" data-icon="edit" data-theme="b" data-iconpos="notext">report</a> </p>
                 <!-- popup displayed when button clicked -->
                 <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
                      style="max-width:350px;">
@@ -78,6 +78,24 @@
                     </fieldset>
                     <p style="text-align:right;" id="status-message"></p>
                 </div>
+                <div data-role="popup" id="reportInfo" class="ui-content" data-theme="e"
+                     style="max-width:350px;">
+
+                    <fieldset data-role="controlgroup">
+                        <label for="textarea">Comment:</label>
+                        <textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+                        <input type="button" value="Submit button, mini" data-mini="true" data-theme="e" onclick="World.submitReport();" />
+                    </fieldset>
+                    <p style="text-align:right;" id="report-message"></p>
+                </div>
+                <script>
+                    $("#reportInfo textarea").on("focus", function () {
+                      $("#reportInfo").popup("reposition", {
+                        y: 10 /* move it to top */
+                      });
+                    });
+
+                </script>
                 
             </div>
 

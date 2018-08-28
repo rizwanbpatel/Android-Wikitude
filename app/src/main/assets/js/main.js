@@ -171,8 +171,8 @@ var World = {
 		// updates distance information of all placemarks
 		World.updateDistanceToUserValues();
 
-		//World.updateStatusMessage(World.markerList.length + ' places loaded');
-
+		World.updateStatusMessage(World.markerList.length + ' places loaded');
+        $("#popupInfo").popup("close");
 		// set distance slider to 100%
 		$("#panel-distance-range").val(100);
 		$("#panel-distance-range").slider("refresh");
@@ -258,6 +258,13 @@ var World = {
         ServerInformation.POI_RADIUS_VALUE = "600";
         World.isNearbySearchEnable = true;
         World.requestDataFromServer(World.currentLat, World.currentLon);
+    },
+
+    submitReport: function(){
+
+        var comments = $("#textarea").val();
+        $("#textarea").val('');
+        $("#reportInfo").popup("close",231);
     },
 
     addMarkers: function (feature) {

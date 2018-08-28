@@ -45,9 +45,9 @@
             <!-- MAIN PAGE CONTENT -->
 
             <!-- header of UI holding feature buttons -->
-            <div id ="header-status" data-role="header" data-position="fixed" data-theme="c">
-                <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-mini="true">Range</a>
-                <a href="javascript: World.stopRoute();" data-role="button" data-inline="true" data-mini="true">Stop</a>
+            <div id ="header-status" data-role="header" class="ui-bar" data-theme="f" data-position="fixed">
+                <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-theme="e" data-mini="true" style="opacity:0.9;">Range</a>
+              <!--  <a href="javascript: World.stopRoute();" data-role="button" data-inline="true" data-mini="true">Stop</a>-->
                 <h1></h1>
             </div>
 
@@ -58,7 +58,7 @@
             <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed" style="text-align:center;">
 
                 <!-- small status-button -->
-                <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
+                <a style="text-align:right;" id="popupInfoButton" href="#popupInfo"  data-role="button" data-inline="true" data-transition="pop" data-icon="home"  data-iconpos="notext">Log</a> </p>
 
                 <!-- popup displayed when button clicked -->
                 <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"

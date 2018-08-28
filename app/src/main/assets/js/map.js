@@ -10,6 +10,19 @@ var map = L
 
 map.locate({setView: true, maxZoom: 15});
 
+var markerAdded;
+var startMarker;
+var endMarker;
+var startIcon = new tomtom.L.icon({
+              iconUrl: "assets/start.png",
+                    iconSize: [34, 34]
+                });
+
+var endIcon = new tomtom.L.icon({
+                    iconUrl: "assets/end.png",
+                    iconSize: [34, 34]
+                });
+
 
 
 

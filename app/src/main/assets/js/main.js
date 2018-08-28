@@ -171,7 +171,7 @@ var World = {
 		// updates distance information of all placemarks
 		World.updateDistanceToUserValues();
 
-		World.updateStatusMessage(World.markerList.length + ' places loaded');
+		//World.updateStatusMessage(World.markerList.length + ' places loaded');
 
 		// set distance slider to 100%
 		$("#panel-distance-range").val(100);
@@ -200,8 +200,8 @@ var World = {
 	// updates status message shown in small "i"-button aligned bottom center
 	updateStatusMessage: function updateStatusMessageFn(message, isWarning) {
 
-		var themeToUse = isWarning ? "e" : "c";
-		var iconToUse = isWarning ? "alert" : "info";
+		var themeToUse = isWarning ? "e" : "e";
+		var iconToUse = isWarning ? "home" : "refresh";
 
 		$("#status-message").html(message);
 		$("#popupInfoButton").buttonMarkup({

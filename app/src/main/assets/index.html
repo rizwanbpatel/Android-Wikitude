@@ -67,6 +67,9 @@
 
                     <fieldset data-role="controlgroup">
                         <legend>Choose Category :</legend>
+                        <input type="radio" name="category_rb" id="school" value="school" onclick="World.loadSchools()"/>
+                        <label for="school">School</label>
+
                         <input type="radio" name="category_rb" id="hotel" value="hotel" onclick="World.loadHotels()"/>
                         <label for="hotel">Hotel</label>
 
@@ -84,7 +87,7 @@
                     <fieldset data-role="controlgroup">
                         <label for="textarea">Comment:</label>
                         <textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
-                        <input type="button" value="Submit button, mini" data-mini="true" data-theme="e" onclick="World.submitReport();" />
+                        <input type="button" value="Submit" data-mini="true" data-theme="e" onclick="World.submitReport();" />
                     </fieldset>
                     <p style="text-align:right;" id="report-message"></p>
                 </div>

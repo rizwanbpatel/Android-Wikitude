@@ -246,6 +246,12 @@ var World = {
         World.requestDataFromServer(World.currentLat, World.currentLon);
     },
 
+    loadSchools: function loadSchoolsFn() {
+        ServerInformation.POIDATA_CATEGORY = "school";
+        ServerInformation.POI_RADIUS_VALUE = "1000";
+        World.isNearbySearchEnable = false;
+        World.requestDataFromServer(World.currentLat, World.currentLon);
+    },
     loadAirports: function loadAirportFn() {
         ServerInformation.POIDATA_CATEGORY = "airport";
         ServerInformation.POI_RADIUS_VALUE = "10000";
@@ -261,10 +267,52 @@ var World = {
     },
 
     submitReport: function(){
-
         var comments = $("#textarea").val();
         $("#textarea").val('');
         $("#reportInfo").popup("close",231);
+        var report = {
+            "report": {
+                "version": "1.0",
+                "mapVersion": "2015.06",
+                "createTime": "2018-08-30",
+                "language": "EN",
+                "comments": comments,
+                "bbox": [[73.83393482857589, 18.526741544857572], [73.84678797417693, 18.532214433894037]],
+                "location": [World.currentLon, World.currentLat],
+                "anomaly": {
+                    "type": "FeedbackOnData",
+                    "validityFlags": null,
+                    "timeDomain": null,
+                    "location": null
+                }
+            }
+        };
+        $.ajax({
+            type: "POST",
+            url: "http://10.198.65.231:80/mit-webservice/v1.5/reports",
+            headers: {
+                'X-MIT-Access-Token':'sis.lebanon@gmail.com',
+                'x-mit-client-id':'TomTom',
+                'x-mit-user-id':'53662406',
+                'x-mit-security-provider':'Guest',
+                'content-type':'application/json;charset=UTF-8'
+            },
+            crossDomain: true,
+            data: JSON.stringify(report),
+            dataType: 'json',
+            success: function(responseData, status, xhr) {
+                console.log("Success ****** :" + JSON.stringify(responseData));
+                var sucResp = JSON.stringify(responseData);
+                var guid = sucResp.report.guid;
+                alert("MIT Task : "+ guid);
+            },
+            error: function(request, status, error) {
+                console.log(data);
+                console.log("Error ****** :" + error);
+                console.log("Error ****** :" + status);
+                console.log("Error ****** :" + request.responseText);
+            }
+        });
     },
 
     addMarkers: function (feature) {

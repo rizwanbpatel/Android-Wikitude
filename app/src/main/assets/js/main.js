@@ -302,8 +302,7 @@ var World = {
             dataType: 'json',
             success: function(responseData, status, xhr) {
                 console.log("Success ****** :" + JSON.stringify(responseData));
-                var sucResp = JSON.stringify(responseData);
-                var guid = sucResp.report.guid;
+                var guid = responseData.guid;
                 alert("MIT Task : "+ guid);
             },
             error: function(request, status, error) {

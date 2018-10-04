@@ -1,98 +1,182 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 
-<head>
-
+    <head>
+    
     <!--  basic meta information -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Content-Type" content="application/json; charset=utf-8">
     <meta content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes" name="viewport">
-
+    
     <title>My ARchitect World</title>
 
     <script src="https://www.wikitude.com/libs/architect.js"></script>
-    <script src="ade.js"></script>
+    <script src="../ade.js"></script>
 
+    <!-- positioning of poi-radar -->
+    <link rel="stylesheet" href="css/poi-radar.css" />
+    
     <!-- jquery mobile CSS -->
-    <link rel="stylesheet" href="jquery/jquery.mobile-1.3.2.min.css"/>
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.3.2.min.css" />
     <!-- required to set background transparent & enable "click through" -->
-    <link rel="stylesheet" href="jquery/jquery-mobile-transparent-ui-overlay.css"/>
+    <link rel="stylesheet" href="jquery/jquery-mobile-transparent-ui-overlay.css" />
 
     <!-- jquery JS files -->
     <script type="text/javascript" src="jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="jquery/jquery.mobile-1.3.2.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/map.css" />
+        <link rel="stylesheet" type="text/css" href="css/elements.css">
+        <script src="js/tomtom.min.js"></script>
 
     <!-- marker representation-->
-    <script src="js/marker.js"></script>
+    <script src="js/marker.js"></script>    
 
     <!-- World logic-->
-    <script type="text/javascript" src="js/fromwebservice.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <!-- radar component -->
+    <script type="text/javascript" src="js/radar.js"></script>
 </head>
+    
+    <body >
+     <div data-role="page" id="page1" style="background: none;" >
+            
+            <!-- MAIN PAGE CONTENT -->
 
-<body>
-<div data-role="page" id="page1" style="background: none;">
+            <!-- header of UI holding feature buttons -->
+            <div id ="header-status" data-role="header" class="ui-bar" data-theme="f" data-position="fixed">
+                <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-theme="e" data-mini="true" style="opacity:0.9;">Range</a>
+              <!--  <a href="javascript: World.stopRoute();" data-role="button" data-inline="true" data-mini="true">Stop</a>-->
+                <h1></h1>
+            </div>
 
-    <!-- MAIN PAGE CONTENT -->
+            <!-- the radar div - Wikitude SDK radar will be drawn into this div -->
+            <div class="radarContainer_left" id="radarContainer"></div>
 
-    <!-- transparent footer-->
-    <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"
-         style="text-align:center;">
+            <!-- transparent footer-->
+            <div data-role="footer" class="ui-bar" data-theme="f" data-position="fixed"  style="text-align: center;">
 
-        <!-- small status-button -->
-        <a style="text-align:right;" id="popupInfoButton" href="#popupInfo" data-rel="popup"
-           data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop"
-           data-icon="alert" data-theme="e" data-iconpos="notext">Log</a> </p>
+                <!-- small status-button -->
+                <a style="text-align: center;" id="popupInfoButton" href="#popupInfo" data-rel="popup" data-role="button" data-inline="true" data-transition="pop" data-icon="home"  data-iconpos="notext">Log</a> </p>
 
-        <!-- popup displayed when button clicked -->
-        <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
-             style="max-width:350px;">
+                <a class="ui-btn-right" style="margin-right:5%" id="reportInfoButton" href="#reportInfo" data-rel="popup" data-role="button"  data-inline="true" data-transition="pop" data-icon="edit" data-theme="b" data-iconpos="notext">report</a> </p>
+                <!-- popup displayed when button clicked -->
+                <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e"
+                     style="max-width:350px;">
 
-            <fieldset data-role="controlgroup">
-                <legend>Choose Category :</legend>
-                <input type="radio" name="category_rb" id="hotel" value="hotel" onclick="World.loadHotels()"/>
-                <label for="hotel">Hotel</label>
+                    <fieldset data-role="controlgroup">
+                        <legend>Choose Category :</legend>
+                        <input type="radio" name="category_rb" id="school" value="school" onclick="World.loadSchools()"/>
+                        <label for="school">School</label>
 
-                <input type="radio" name="category_rb" id="airport" value="airport" onclick="World.loadAirports()"/>
-                <label for="airport">Airport</label>
+                        <input type="radio" name="category_rb" id="hotel" value="hotel" onclick="World.loadHotels()"/>
+                        <label for="hotel">Hotel</label>
 
-                <input type="radio" name="category_rb" id="nearby" value="nearby" onclick="World.loadAllNearBy()"/>
-                <label for="nearby">All Nearby</label>
-            </fieldset>
-            <p style="text-align:right;" id="status-message"></p>
+                        <input type="radio" name="category_rb" id="airport" value="airport" onclick="World.loadAirports()"/>
+                        <label for="airport">Airport</label>
+
+                        <input type="radio" name="category_rb" id="nearby" value="nearby" onclick="World.loadAllNearBy()"/>
+                        <label for="nearby">All Nearby</label>
+                    </fieldset>
+                    <p style="text-align:right;" id="status-message"></p>
+                </div>
+                <div data-role="popup" id="reportInfo" class="ui-content" data-theme="e"
+                     style="max-width:350px;">
+
+                    <fieldset data-role="controlgroup">
+                        <label for="textarea">Comment:</label>
+                        <textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+                        <input type="button" value="Submit" data-mini="true" data-theme="e" onclick="World.submitReport();" />
+                    </fieldset>
+                    <p style="text-align:right;" id="report-message"></p>
+                </div>
+                <script>
+                    $("#reportInfo textarea").on("focus", function () {
+                      $("#reportInfo").popup("reposition", {
+                        y: 10 /* move it to top */
+                      });
+                    });
+
+                </script>
+                
+            </div>
+
+
+
+            <!-- PANELS, ONLY VISIBLE ON DEMAND -->
+
+            <!-- panel containing POI detail information -->
+            <div data-role="popup" id="panel-poidetail" data-position="right" data-display="overlay" style="width: 300px; height: 400px;" data-theme="c">
+
+                <!-- header with "close" button -->
+                <div data-role="header" style="width: inherit;" data-theme="c">
+                    <h1>Details</h1>
+                    <a href="#header" data-rel="close">Close</a>
+                </div>
+
+                <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
+
+                <div data-role= "content" id="map" style=" height: 75%;"></div>
+
+                <div data-role="footer" style="width: inherit;" data-theme="c">
+
+                    <!-- title -->
+                    <h3 id="poi-detail-title"></h3>
+
+                    <!-- description -->
+                   <!-- <a href="javascript: World.onRouteSelected();" data-role="button" data-inline="true">Route</a>-->
+                </div>
+            </div>
+
+
+            <script>
+
+                var map = L.map("map",
+                                    {
+                                        key : "b5w0ip0dC0PPuyZ75hbmUPBcQK7IhO0V",
+                                         source: ["vector"],
+                                        glyphsUrl : "https://api.tomtom.com/maps-sdk-js/glyphs/v1/{fontstack}/{range}.pbf",
+                                        spriteUrl : "https://api.tomtom.com/maps-sdk-js/sprites/v1/sprite"
+                                    }, 18);
+                var markerAdded;
+                var startMarker;
+                var endMarker;
+                var startIcon = new tomtom.L.icon({
+                    iconUrl: "assets/start.png",
+                    iconSize: [34, 34]
+                });
+
+                var endIcon = new tomtom.L.icon({
+                    iconUrl: "assets/end.png",
+                    iconSize: [34, 34]
+                });
+            </script>
+         <!-- range panel -->
+            <div data-role="panel" id="panel-distance" data-position="left" data-display="overlay" style="background-color:#F0F0F0;" data-theme="c">
+
+                    <!-- header with close button -->
+                    <div data-role="header" data-theme="c">
+                        <h1>Range</h1>
+                        <a href="#header" data-rel="close">Close</a>
+                    </div>
+
+                    <!-- distance information, calculated/updated in code  -->
+                    <div data-role="content">
+
+                        <!-- Range in m/km-->
+                        <h4> Range: <a id="panel-distance-value"></a></h4>
+
+                        <!-- Amount of visible places -->
+                        <h4> Visible: <a id="panel-distance-places"></a></h4>
+
+                        <!-- default slider -->
+                        <input id="panel-distance-range" type="range" data-highlight="true" name="rangeSlider" min="0" max="100" value="100" data-show-value="false" step="5" data-popup-enabled="false">
+                    </div>
+            </div>
+
         </div>
 
-    </div>
-
-    <!-- PANELS, ONLY VISIBLE ON DEMAND -->
-
-    <!-- panel containing POI detail information -->
-    <div data-role="panel" id="panel-poidetail" data-position="right" data-display="overlay"
-         style="background-color:#F0F0F0; opacity:0.65;" data-theme="c">
-
-        <!-- header with "close" button -->
-        <div data-role="header" data-theme="c">
-            <h1>Details</h1>
-            <a href="#header" data-rel="close">Close</a>
-        </div>
-
-        <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
-        <div data-role="content">
-
-            <!-- title -->
-            <h3 id="poi-detail-title"></h3>
-
-            <!-- description -->
-            <h4 id="poi-detail-description"></h4>
-
-            <h4 id="poi-detail-category"></h4>
-
-            <!-- distance -->
-        </div>
-    </div>
-
-</div>
-
-</body>
+    </body>
+    
 </html>
